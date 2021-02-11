@@ -103,7 +103,7 @@ const makeUserCard = ({ avatar_url, html_url, location, login, name, followers, 
 axios.get('https://api.github.com/users/lindellcarternyc')
   .then(res => {
     const userCard = makeUserCard(res.data)
-    console.log(userCard)
+    document.querySelector('.cards').appendChild(userCard)
   })
   .catch(err => {
     console.log(`Error: ${err}`)
