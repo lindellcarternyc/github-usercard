@@ -58,3 +58,53 @@ const followersArray = [];
     luishrd
     bigknell
 */
+
+import axios from 'axios'
+
+const createTextElement = (tagName, text, className) => {
+  const tag = document.createElement(tagName)
+  if (className) {
+    tag.className = className
+  }
+  tag.textContent = text
+  return tag
+}
+
+const makeUserCard = ({ avatar_url, html_url, location, login, name, followers, following, bio }) => {
+  const card = document.createElement('div')
+  card.className = 'card'
+
+  const avatar = document.createElement('img')
+  avatar.setAttribute('src', avatar_url)
+  card.appendChild(avatar)
+
+  const cardInfo = document.createElement('div')
+  cardInfo.className = 'card-info'
+
+  cardInfo.appendChild(createTextElement('h3', name || login, name))
+  cardInfo.appendChild(createTextElement('p', login, 'username'))
+  cardInfo.appendChild(createTextElement('p', `Location: ${location}`))
+
+  const profile = createTextElement ('p', 'Profile: ')
+  const profileLink = document.createElement('a')
+  profileLink.textContent = html_url
+  profileLink.setAttribute('href', html_url)
+  profile.appendChild(profileLink)
+  cardInfo.appendChild(profile)
+
+  cardInfo.appendChild(createTextElement('p', `Followers: ${followers}`))
+  cardInfo.appendChild(createTextElement('p', `Following: ${following}`))
+  cardInfo.appendChild(createTextElement('p', `Bio: ${bio || ''}`))
+
+  card.appendChild(cardInfo)
+  return card
+}
+
+axios.get('https://api.github.com/users/lindellcarternyc')
+  .then(res => {
+    const userCard = makeUserCard(res.data)
+    console.log(userCard)
+  })
+  .catch(err => {
+    console.log(`Error: ${err}`)
+  })
